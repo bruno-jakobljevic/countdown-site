@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Countdown Prank</title>
+    <title>Tick-Tock goes the clock</title>
     <style>
         * {
             margin: 0;
@@ -22,7 +22,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 800px; /* wider so lines don’t overlap */
             padding: 2rem;
         }
 
@@ -30,6 +30,7 @@
             font-size: 1.5rem;
             margin-bottom: 1rem;
             color: #9fb8d9;
+            font-family: 'Creepster', cursive; /* scary font */
         }
 
         #countdown {
@@ -38,6 +39,7 @@
             letter-spacing: 0.1em;
             color: #ff6b6b;
             margin: 1rem 0;
+            font-family: 'Creepster', cursive; /* scary font */
         }
 
         #threats {
@@ -46,6 +48,11 @@
             color: #c9d6e8;
             white-space: pre-line;
             margin-top: 1.5rem;
+            font-family: 'Creepster', cursive; /* scary font */
+        }
+
+        #threats .warn-line {
+            color: #ff6b6b; /* same color as countdown */
         }
 
         #final-message {
@@ -54,6 +61,7 @@
             color: #ff6b6b;
             white-space: pre-line;
             margin-top: 1.5rem;
+            font-family: 'Creepster', cursive; /* scary font */
         }
 
         .hidden {
@@ -70,6 +78,11 @@
             }
         }
     </style>
+
+    <!-- Google Font: Creepster (scary) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -82,21 +95,14 @@ If I don't get sysadmin, I will be forced to:
 1. Brute-force your home network...or ICMP flood...or something
 2. Remind you daily how your caution hurts me
 
-You have been warned. 😈
+<span class="warn-line">You have been warned. 😈</span>
         </div>
 
-        <!-- Final message, shown when timer ends -->
         <div id="final-message" class="hidden">Time has run out.\nPrepare for hell.</div>
     </div>
 
     <script>
-        // =========================
-        // SET YOUR DEADLINE HERE:
-        // Format: "YYYY-MM-DDTHH:MM:SS" (local time)
-        // Example: "2026-10-09T12:00:00"
         const TARGET_DATE = "2026-10-09T12:06:00";
-        // =========================
-
         const countdownEl = document.getElementById('countdown');
         const threatsEl = document.getElementById('threats');
         const finalMessageEl = document.getElementById('final-message');
@@ -122,11 +128,12 @@ You have been warned. 😈
             const remaining = targetTime - now;
 
             if (remaining <= 0) {
-                // Timer finished
                 countdownEl.classList.add('hidden');
                 threatsEl.classList.add('hidden');
-                titleEl.textContent = "⚠️ FINAL NOTICE ⚠️";
-                titleEl.classList.add('blink');
+                if (titleEl) {
+                    titleEl.textContent = "⚠️ FINAL NOTICE ⚠️";
+                    titleEl.classList.add('blink');
+                }
                 finalMessageEl.classList.remove('hidden');
                 return;
             }
@@ -134,7 +141,6 @@ You have been warned. 😈
             countdownEl.textContent = formatTime(remaining);
         }
 
-        // Update immediately, then every second
         updateCountdown();
         setInterval(updateCountdown, 1000);
     </script>
