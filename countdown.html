@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Countdown Prank</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0b0f19;
+            color: #e6eef9;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #9fb8d9;
+        }
+
+        #countdown {
+            font-size: 5rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            color: #ff6b6b;
+            margin: 1rem 0;
+        }
+
+        #threats {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #c9d6e8;
+            white-space: pre-line;
+            margin-top: 1.5rem;
+        }
+
+        #final-message {
+            font-size: 1.4rem;
+            line-height: 1.5;
+            color: #ff6b6b;
+            white-space: pre-line;
+            margin-top: 1.5rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .blink {
+            animation: blink 1s steps(2, start) infinite;
+        }
+
+        @keyframes blink {
+            to {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="countdown">24:00:00</div>
+
+        <!-- Threats visible from the start -->
+        <div id="threats">
+If I don't get Home VPN access before this hits zero,
+I will be forced to:
+- Brute-force your home network...or ICMP flood...or something
+- Remind you daily how your caution hurts me
+- Write a very dramatic song about your server and make it famous
+
+You have been warned. 😈
+        </div>
+
+        <!-- Final message, shown when timer ends -->
+        <div id="final-message" class="hidden">Time has run out.\nPrepare for hell.</div>
+    </div>
+
+    <script>
+        // =========================
+        // SET YOUR DEADLINE HERE:
+        // Format: "YYYY-MM-DDTHH:MM:SS" (local time)
+        // Example: "2026-10-09T12:00:00"
+        const TARGET_DATE = "2026-10-09T12:06:00";
+        // =========================
+
+        const countdownEl = document.getElementById('countdown');
+        const threatsEl = document.getElementById('threats');
+        const finalMessageEl = document.getElementById('final-message');
+        const titleEl = document.getElementById('title');
+
+        const targetTime = new Date(TARGET_DATE).getTime();
+
+        function formatTime(ms) {
+            if (ms <= 0) return "00:00:00";
+
+            const totalSeconds = Math.floor(ms / 1000);
+            const days = Math.floor(totalSeconds / (24 * 3600));
+            const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            const totalHours = days * 24 + hours;
+            return `${String(totalHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const remaining = targetTime - now;
+
+            if (remaining <= 0) {
+                // Timer finished
+                countdownEl.classList.add('hidden');
+                threatsEl.classList.add('hidden');
+                titleEl.textContent = "⚠️ FINAL NOTICE ⚠️";
+                titleEl.classList.add('blink');
+                finalMessageEl.classList.remove('hidden');
+                return;
+            }
+
+            countdownEl.textContent = formatTime(remaining);
+        }
+
+        // Update immediately, then every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
